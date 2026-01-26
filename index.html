@@ -5,19 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>iOS Video Debug</title>
 <style>
-/* ページ拡大・スクロールバウンス防止 */
+/* ページ拡大・スクロールバウンス・プルリフレッシュ防止 */
 html, body {
   overflow: hidden;
   overscroll-behavior: none;
-  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: auto;
+  touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
   position: fixed;
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
-body { font-family: system-ui; margin: 0; padding: 16px; box-sizing: border-box; overflow-y: auto; }
+
+/* スクロール可能なコンテナ */
+#container {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+body { font-family: system-ui; }
 
 /* コンテンツは選択可能に */
 #log, #timeDisplay { -webkit-user-select: text; user-select: text; }
@@ -40,6 +56,7 @@ button, input { touch-action: manipulation; }
 </style>
 </head>
 <body>
+<div id="container">
 
 <h3>iOS Video Debug</h3>
 
@@ -80,6 +97,25 @@ document.addEventListener("touchstart", function(e) {
 
 document.addEventListener("gesturestart", function(e) {
   e.preventDefault();
+}, { passive: false });
+
+// プルリフレッシュ防止
+var container = document.getElementById("container");
+var lastY = 0;
+
+container.addEventListener("touchstart", function(e) {
+  lastY = e.touches[0].clientY;
+}, { passive: true });
+
+container.addEventListener("touchmove", function(e) {
+  var y = e.touches[0].clientY;
+  var scrollTop = container.scrollTop;
+
+  // 上端で下に引っ張った時のみブロック
+  if (scrollTop <= 0 && y > lastY) {
+    e.preventDefault();
+  }
+  lastY = y;
 }, { passive: false });
 
 // ログ関数
@@ -252,5 +288,6 @@ function fallbackCopy(text) {
 log("Setup complete");
 </script>
 
+</div>
 </body>
 </html>
