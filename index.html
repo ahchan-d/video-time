@@ -514,7 +514,7 @@ function fallbackCopy(text) {
 
 // ===== CSV読み込み =====
 document.getElementById("loadCsvBtn").onclick = function() {
-  fetch("/jichi2507_rule.csv")
+  fetch("jichi2507_rule.csv")
     .then(function(res) {
       if (!res.ok) throw new Error("CSV not found");
       return res.text();
@@ -862,7 +862,7 @@ function showStatus(msg, type) {
 
 // ===== 初期化: CSV自動読み込み =====
 window.onload = function() {
-  fetch("/jichi2507_rule.csv")
+  fetch("jichi2507_rule.csv")
     .then(function(res) {
       if (!res.ok) throw new Error("CSV not found");
       return res.text();
