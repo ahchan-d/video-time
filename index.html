@@ -37,7 +37,7 @@ body { font-family: system-ui; }
 
 /* コンテンツは選択可能に */
 #timeDisplay, input, textarea, td { -webkit-user-select: text; user-select: text; }
-video { width: 100%; max-height: 40vh; background: #333; }
+video { width: 100%; max-height: 40vh; background: #333; touch-action: manipulation; }
 button { font-size: 16px; padding: 10px 14px; margin: 4px; }
 
 /* シークバー */
@@ -246,10 +246,18 @@ var timeDisplay = document.getElementById("timeDisplay");
 
 // ===== ピンチズーム防止 =====
 document.addEventListener("touchstart", function(e) {
+  // video要素内のマルチタッチは許可（ピンチズームなど）
+  if (e.target.tagName === "VIDEO" || e.target.closest("video")) {
+    return;
+  }
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
 
 document.addEventListener("gesturestart", function(e) {
+  // video要素内のジェスチャーは許可
+  if (e.target.tagName === "VIDEO" || e.target.closest("video")) {
+    return;
+  }
   e.preventDefault();
 }, { passive: false });
 
@@ -262,6 +270,12 @@ container.addEventListener("touchstart", function(e) {
 }, { passive: true });
 
 container.addEventListener("touchmove", function(e) {
+  // video要素やそのコントロール内のタッチは無視
+  var target = e.target;
+  if (target.tagName === "VIDEO" || target.closest("video")) {
+    return;
+  }
+
   var y = e.touches[0].clientY;
   var scrollTop = container.scrollTop;
   if (scrollTop <= 0 && y > lastY) {
