@@ -37,7 +37,7 @@ body { font-family: system-ui; }
 
 /* コンテンツは選択可能に */
 #timeDisplay, input, textarea, td { -webkit-user-select: text; user-select: text; }
-video { width: 100%; max-height: 40vh; background: #333; touch-action: manipulation; }
+video { width: 100%; max-height: 40vh; background: #333; touch-action: none; pointer-events: none; }
 button { font-size: 16px; padding: 10px 14px; margin: 4px; }
 
 /* シークバー */
@@ -47,8 +47,12 @@ button { font-size: 16px; padding: 10px 14px; margin: 4px; }
 #playbackControls { margin: 8px 0; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 #playbackControls button { font-size: 14px; padding: 8px 12px; }
 #speedDisplay { font-family: monospace; font-size: 14px; min-width: 40px; text-align: center; }
-#fineSeek { margin: 8px 0; }
-#fineSeek button { font-size: 14px; padding: 8px 12px; }
+#fineSeek { margin: 8px 0; display: flex; flex-wrap: nowrap; gap: 4px; }
+#fineSeek button { font-size: 12px; padding: 6px 8px; flex-shrink: 0; }
+#volumeControls { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
+#volumeControls button { font-size: 14px; padding: 8px 12px; }
+#volumeBar { width: 120px; height: 8px; cursor: pointer; }
+#volumeDisplay { font-family: monospace; font-size: 14px; min-width: 40px; }
 #timestampBtn { background: #4CAF50; color: white; border: none; border-radius: 4px; }
 #timestampBtn:active { background: #388E3C; }
 .copied { background: #2196F3 !important; }
@@ -137,7 +141,7 @@ button, input { touch-action: manipulation; }
 <div class="section">
   <h4>動画</h4>
   <p><input type="file" id="file" accept="video/*"></p>
-  <video id="video" controls playsinline muted webkit-playsinline></video>
+  <video id="video" playsinline muted webkit-playsinline></video>
 
   <div id="seekContainer">
     <input type="range" id="seekBar" min="0" max="100" step="0.01" value="0">
@@ -156,6 +160,11 @@ button, input { touch-action: manipulation; }
       <button id="seekFwdFrame">+0.1s</button>
       <button id="seekFwd1">+1s</button>
       <button id="seekFwd10">+10s</button>
+    </div>
+    <div id="volumeControls">
+      <button id="muteBtn">🔇 ミュート</button>
+      <input type="range" id="volumeBar" min="0" max="100" value="0">
+      <span id="volumeDisplay">0%</span>
     </div>
     <p>
       <button id="fineModeBtn">精密モード</button>
@@ -299,10 +308,8 @@ fileInput.onchange = function(e) {
 
 // ===== 時間フォーマット =====
 function formatTime(sec) {
-  if (isNaN(sec) || !isFinite(sec)) return "00:00.000";
-  var m = Math.floor(sec / 60);
-  var s = sec % 60;
-  return String(m).padStart(2, "0") + ":" + s.toFixed(3).padStart(6, "0");
+  if (isNaN(sec) || !isFinite(sec)) return "0.000";
+  return sec.toFixed(3);
 }
 
 function formatTimeForCopy(sec) {
@@ -387,6 +394,41 @@ document.getElementById("seekBackFrame").onclick = function() { seekBy(-0.1); };
 document.getElementById("seekFwdFrame").onclick = function() { seekBy(0.1); };
 document.getElementById("seekFwd1").onclick = function() { seekBy(1); };
 document.getElementById("seekFwd10").onclick = function() { seekBy(10); };
+
+// ===== 音量コントロール =====
+var volumeBar = document.getElementById("volumeBar");
+var volumeDisplay = document.getElementById("volumeDisplay");
+var muteBtn = document.getElementById("muteBtn");
+
+function updateVolumeDisplay() {
+  var vol = Math.round(v.volume * 100);
+  volumeBar.value = vol;
+  volumeDisplay.textContent = vol + "%";
+  if (v.muted || v.volume === 0) {
+    muteBtn.textContent = "🔇 ミュート";
+  } else {
+    muteBtn.textContent = "🔊 音あり";
+  }
+}
+
+volumeBar.oninput = function() {
+  v.volume = volumeBar.value / 100;
+  v.muted = false;
+  updateVolumeDisplay();
+};
+
+muteBtn.onclick = function() {
+  if (v.muted) {
+    v.muted = false;
+    if (v.volume === 0) v.volume = 0.5;
+  } else {
+    v.muted = true;
+  }
+  updateVolumeDisplay();
+};
+
+// 初期状態でミュートなので音量0で表示
+updateVolumeDisplay();
 
 // ===== 再生・停止・早送り・巻き戻し =====
 var speedSteps = [1, 2, 4, 8];
