@@ -88,8 +88,8 @@ button { font-size: 16px; padding: 10px 14px; margin: 4px; cursor: pointer; }
 #fineSeek button { font-size: 12px; padding: 6px 8px; flex-shrink: 0; }
 #volumeControls { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
 #volumeControls button { font-size: 14px; padding: 8px 12px; }
-#volumeBar { width: 120px; height: 8px; cursor: pointer; }
-#volumeDisplay { font-family: monospace; font-size: 14px; min-width: 40px; }
+#volumeBar { width: 150px; height: 8px; cursor: pointer; }
+#volumeDisplay { font-family: monospace; font-size: 14px; min-width: 50px; }
 #timestampBtn { background: #4CAF50; color: white; border: none; border-radius: 4px; }
 #timestampBtn:active { background: #388E3C; }
 .copied { background: #2196F3 !important; }
@@ -144,6 +144,28 @@ input[type="range"] {
 
 /* オートサジェスト */
 .query-input-container { position: relative; }
+
+/* インサートモードインジケーター */
+.insert-mode-indicator {
+  font-size: 11px;
+  font-weight: normal;
+  color: var(--text-secondary);
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--bg-tertiary);
+}
+
+.insert-mode-indicator.active {
+  background: #4CAF50;
+  color: white;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
 #suggestions {
   position: absolute;
   top: 100%;
@@ -190,6 +212,182 @@ input[type="range"] {
 #status.error { color: #f44336; }
 #status.success { color: #4CAF50; }
 
+/* 自動保存ステータス */
+#autoSaveStatus {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 8px 0;
+  display: none;
+}
+#autoSaveStatus.active {
+  display: block;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+[data-theme="dark"] #autoSaveStatus.active {
+  background: #1b3d1f;
+  color: #81c784;
+  border-color: #2e5a32;
+}
+
+/* 自動保存インジケーター */
+#autoSaveIndicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4CAF50;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+#autoSaveIndicator.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* バックアップ復元モーダル */
+.backup-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+}
+
+.backup-modal.show {
+  display: flex;
+}
+
+.backup-modal-content {
+  background: var(--bg-color);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.backup-modal-content h4 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+}
+
+.backup-modal-content p {
+  margin: 8px 0;
+}
+
+/* タイマーパネル */
+.timer-panel {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  border: 2px solid var(--border-color);
+}
+
+.timer-panel.running {
+  border-color: #4CAF50;
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(76, 175, 80, 0.1));
+}
+
+.timer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.timer-header h4 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer-display {
+  font-family: monospace;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.timer-display.running {
+  color: #4CAF50;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.timer-controls button {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.timer-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.timer-stat {
+  background: var(--bg-color);
+  padding: 10px 8px;
+  border-radius: 6px;
+}
+
+.timer-stat-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2196F3;
+}
+
+.timer-stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.timer-avg {
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.timer-avg-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.timer-avg-label {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
 /* テーマ切り替えボタン */
 .theme-toggle-container {
   position: fixed;
@@ -219,6 +417,210 @@ input[type="range"] {
 .theme-toggle .icon {
   font-size: 16px;
 }
+
+/* PC用2列レイアウト */
+@media (min-width: 1024px) {
+  #container {
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+
+  .main-grid {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 300px;
+    overflow: hidden;
+  }
+
+  .left-column {
+    flex: 1 1 50%;
+  }
+
+  .right-column {
+    flex: 1 1 50%;
+  }
+
+  .section {
+    margin: 0;
+  }
+
+  video {
+    max-height: none;
+    width: 100%;
+  }
+
+  #tableContainer {
+    max-height: 400px;
+  }
+
+  /* リサイズハンドル */
+  .resize-handle {
+    width: 8px;
+    background: var(--border-color);
+    cursor: col-resize;
+    flex-shrink: 0;
+    position: relative;
+    transition: background 0.2s;
+    margin: 0 4px;
+    border-radius: 4px;
+  }
+
+  .resize-handle:hover,
+  .resize-handle.dragging {
+    background: #2196F3;
+  }
+
+  .resize-handle::after {
+    content: "⋮";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .resize-handle:hover::after,
+  .resize-handle.dragging::after {
+    color: white;
+  }
+}
+
+/* モバイルではリサイズハンドル非表示 */
+@media (max-width: 1023px) {
+  .resize-handle {
+    display: none;
+  }
+}
+
+/* ショートカットヘルプ */
+.shortcut-help-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 1000;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shortcut-help-btn:hover {
+  background: var(--table-hover);
+}
+
+.shortcut-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.shortcut-modal.show {
+  display: flex;
+}
+
+.shortcut-content {
+  background: var(--bg-color);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.shortcut-content h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.shortcut-section {
+  margin-bottom: 16px;
+}
+
+.shortcut-section h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.shortcut-item:last-child {
+  border-bottom: none;
+}
+
+.shortcut-key {
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.shortcut-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+/* キーバインド表示（ボタン横） */
+.key-hint {
+  font-size: 13px;
+  font-weight: bold;
+  color: #000000;
+  margin-left: 6px;
+  background: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #999;
+}
+
+[data-theme="dark"] .key-hint {
+  color: #ffffff;
+  background: #444;
+  border-color: #666;
+}
+
+@media (max-width: 1023px) {
+  .key-hint {
+    display: none;
+  }
+  .shortcut-help-btn {
+    display: none;
+  }
+}
 </style>
 </head>
 <body>
@@ -233,37 +635,42 @@ input[type="range"] {
 
 <h3>Video Annotation Tool</h3>
 
+<div class="main-grid" id="mainGrid">
+<div class="left-column" id="leftColumn">
+
 <!-- 動画セクション -->
 <div class="section">
   <h4>動画</h4>
-  <p><input type="file" id="file" accept="video/*"></p>
+  <p><input type="file" id="file" accept="video/*"><span class="key-hint" style="margin-left: 8px;">[O]</span></p>
   <video id="video" playsinline muted webkit-playsinline></video>
 
   <div id="seekContainer">
     <input type="range" id="seekBar" min="0" max="100" step="0.01" value="0">
     <div id="timeDisplay">00:00.000 / 00:00.000</div>
     <div id="playbackControls">
-      <button id="btnRewind" class="btn-secondary">⏪</button>
-      <button id="btnPlayPause" class="btn-primary">▶</button>
-      <button id="btnFastFwd" class="btn-secondary">⏩</button>
+      <button id="btnRewind" class="btn-secondary" title="R">⏪<span class="key-hint">[R]</span></button>
+      <button id="btnPlayPause" class="btn-primary" title="Space">▶<span class="key-hint">[Space]</span></button>
+      <button id="btnFastFwd" class="btn-secondary" title="F">⏩<span class="key-hint">[F]</span></button>
       <span id="speedDisplay">1.0x</span>
     </div>
     <div id="fineSeek">
-      <button id="seekBack10">-10s</button>
-      <button id="seekBack1">-1s</button>
-      <button id="seekBackFrame">-0.1s</button>
-      <button id="seekFwdFrame">+0.1s</button>
-      <button id="seekFwd1">+1s</button>
-      <button id="seekFwd10">+10s</button>
+      <button id="seekBack10" title="J">-10s<span class="key-hint">[J]</span></button>
+      <button id="seekBack1" title="←">-1s<span class="key-hint">[←]</span></button>
+      <button id="seekBackFrame" title=",">-0.1s<span class="key-hint">[,]</span></button>
+      <button id="seekFwdFrame" title=".">+0.1s<span class="key-hint">[.]</span></button>
+      <button id="seekFwd1" title="→">+1s<span class="key-hint">[→]</span></button>
+      <button id="seekFwd10" title="L">+10s<span class="key-hint">[L]</span></button>
     </div>
     <div id="volumeControls">
-      <button id="muteBtn">🔇 ミュート</button>
-      <input type="range" id="volumeBar" min="0" max="100" value="0">
-      <span id="volumeDisplay">0%</span>
+      <button id="muteBtn" title="M">🔇 ミュート<span class="key-hint">[M]</span></button>
+      <input type="range" id="volumeBar" min="0" max="300" value="100">
+      <span id="volumeDisplay">100%</span>
+      <span class="key-hint">[↑↓]</span>
+      <span id="boostIndicator" style="display: none; color: #ff9800; font-weight: bold; font-size: 12px;">🔊 BOOST</span>
     </div>
     <p>
-      <button id="fineModeBtn">精密モード</button>
-      <button id="timestampBtn">タイムスタンプをコピー</button>
+      <button id="fineModeBtn" title="P">精密モード<span class="key-hint">[P]</span></button>
+      <button id="timestampBtn" title="C">タイムスタンプをコピー<span class="key-hint">[C]</span></button>
       <span id="copyFeedback"></span>
     </p>
     <div id="fineModeInfo">精密モード: シークバーの動きが10倍細かくなります</div>
@@ -278,8 +685,62 @@ input[type="range"] {
     <button id="openLocalCsvBtn" class="btn-primary">ローカルCSVを開く</button>
     <button id="downloadCsvBtn" class="btn-primary">CSVをダウンロード</button>
     <button id="saveCsvBtn" class="btn-primary" disabled>上書き保存</button>
+    <button id="restoreFromBackupBtn" class="btn-secondary">バックアップ復元</button>
   </p>
+  <div id="autoSaveStatus"></div>
+  <div id="backupStatus" style="display: none; font-size: 12px; color: var(--text-secondary);"></div>
   <div id="status"></div>
+  <div id="autoSaveIndicator">✓ 自動保存完了</div>
+</div>
+
+<!-- バックアップ復元モーダル -->
+<div class="backup-modal" id="backupModal">
+  <div class="backup-modal-content">
+    <h4>💾 バックアップが見つかりました</h4>
+    <p id="backupInfo"></p>
+    <p style="font-size: 13px; color: var(--text-secondary);">前回の作業データが残っています。復元しますか？</p>
+    <div style="display: flex; gap: 8px; margin-top: 16px;">
+      <button id="restoreBackupBtn" class="btn-primary" style="flex: 1;">復元する</button>
+      <button id="ignoreBackupBtn" class="btn-secondary" style="flex: 1;">無視する</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /left-column -->
+
+<div class="resize-handle" id="resizeHandle"></div>
+
+<div class="right-column" id="rightColumn">
+
+<!-- タイマーパネル -->
+<div class="timer-panel" id="timerPanel">
+  <div class="timer-header">
+    <h4>⏱️ 作業タイマー</h4>
+    <button id="timerResetBtn" class="btn-secondary btn-small" title="Y">リセット<span class="key-hint">[Y]</span></button>
+  </div>
+  <div class="timer-display" id="timerDisplay">00:00:00</div>
+  <div class="timer-controls">
+    <button id="timerStartBtn" class="btn-primary" title="T">▶ 開始<span class="key-hint">[T]</span></button>
+    <button id="timerStopBtn" class="btn-secondary" disabled title="T">⏸ 停止<span class="key-hint">[T]</span></button>
+  </div>
+  <div class="timer-stats">
+    <div class="timer-stat">
+      <div class="timer-stat-value" id="timerCount">0</div>
+      <div class="timer-stat-label">追加数</div>
+    </div>
+    <div class="timer-stat">
+      <div class="timer-stat-value" id="timerTotalTime">00:00</div>
+      <div class="timer-stat-label">経過時間</div>
+    </div>
+    <div class="timer-stat">
+      <div class="timer-stat-value" id="timerRate">-</div>
+      <div class="timer-stat-label">件/時</div>
+    </div>
+  </div>
+  <div class="timer-avg" id="timerAvgPanel" style="display: none;">
+    <div class="timer-avg-label">1件あたりの平均時間</div>
+    <div class="timer-avg-value" id="timerAvg">--:--</div>
+  </div>
 </div>
 
 <!-- アノテーション編集フォーム -->
@@ -295,23 +756,26 @@ input[type="range"] {
       <label>start</label>
       <div class="form-row">
         <input type="number" id="editStart" step="0.1" placeholder="0.0">
-        <button type="button" id="setStartBtn" class="btn-secondary btn-small">現在時刻</button>
+        <button type="button" id="setStartBtn" class="btn-secondary btn-small" title="S">現在時刻<span class="key-hint">[S]</span></button>
       </div>
     </div>
     <div>
       <label>end</label>
       <div class="form-row">
         <input type="number" id="editEnd" step="0.1" placeholder="0.0">
-        <button type="button" id="setEndBtn" class="btn-secondary btn-small">現在時刻</button>
+        <button type="button" id="setEndBtn" class="btn-secondary btn-small" title="E">現在時刻<span class="key-hint">[E]</span></button>
       </div>
     </div>
     <div class="query-input-container">
-      <label>query</label>
+      <label>query <span id="insertModeIndicator" class="insert-mode-indicator">[I] で入力モード</span></label>
       <textarea id="editQuery" placeholder="The nurse performs..."></textarea>
       <div id="suggestions"></div>
+      <div style="margin-top: 6px;">
+        <button type="button" id="pasteBtn" class="btn-secondary btn-small" title="V">📋 ペースト<span class="key-hint">[V]</span></button>
+      </div>
     </div>
     <div>
-      <button id="saveBtn" class="btn-primary">追加</button>
+      <button id="saveBtn" class="btn-primary" title="Enter">追加<span class="key-hint">[Enter]</span></button>
       <button id="clearFormBtn" class="btn-secondary">クリア</button>
     </div>
   </div>
@@ -335,6 +799,59 @@ input[type="range"] {
       <tbody id="annotationBody">
       </tbody>
     </table>
+  </div>
+</div>
+
+</div><!-- /right-column -->
+</div><!-- /main-grid -->
+
+<!-- ショートカットヘルプボタン -->
+<button class="shortcut-help-btn" id="shortcutHelpBtn" title="キーボードショートカット">⌨</button>
+
+<!-- ショートカットモーダル -->
+<div class="shortcut-modal" id="shortcutModal">
+  <div class="shortcut-content">
+    <h3>⌨ キーボードショートカット</h3>
+    <div class="shortcut-section">
+      <h4>再生コントロール</h4>
+      <div class="shortcut-item"><span>再生/一時停止</span><span class="shortcut-key">Space</span></div>
+      <div class="shortcut-item"><span>巻き戻し</span><span class="shortcut-key">R</span></div>
+      <div class="shortcut-item"><span>早送り</span><span class="shortcut-key">F</span></div>
+      <div class="shortcut-item"><span>ミュート切り替え</span><span class="shortcut-key">M</span></div>
+      <div class="shortcut-item"><span>音量+10%</span><span class="shortcut-key">↑ / ]</span></div>
+      <div class="shortcut-item"><span>音量-10%</span><span class="shortcut-key">↓ / [</span></div>
+    </div>
+    <div class="shortcut-section">
+      <h4>シーク</h4>
+      <div class="shortcut-item"><span>-10秒 / +10秒</span><span class="shortcut-key">J / L</span></div>
+      <div class="shortcut-item"><span>-1秒 / +1秒</span><span class="shortcut-key">← / →</span></div>
+      <div class="shortcut-item"><span>-0.1秒 / +0.1秒</span><span class="shortcut-key">, / .</span></div>
+    </div>
+    <div class="shortcut-section">
+      <h4>アノテーション</h4>
+      <div class="shortcut-item"><span>Start時刻をセット</span><span class="shortcut-key">S</span></div>
+      <div class="shortcut-item"><span>End時刻をセット</span><span class="shortcut-key">E</span></div>
+      <div class="shortcut-item"><span>追加/更新</span><span class="shortcut-key">Enter</span></div>
+      <div class="shortcut-item"><span>タイムスタンプをコピー</span><span class="shortcut-key">C</span></div>
+      <div class="shortcut-item"><span>精密モード切り替え</span><span class="shortcut-key">P</span></div>
+    </div>
+    <div class="shortcut-section">
+      <h4>クエリ入力</h4>
+      <div class="shortcut-item"><span>入力モード開始</span><span class="shortcut-key">I</span></div>
+      <div class="shortcut-item"><span>入力モード終了</span><span class="shortcut-key">Esc</span></div>
+      <div class="shortcut-item"><span>ペースト</span><span class="shortcut-key">V</span></div>
+    </div>
+    <div class="shortcut-section">
+      <h4>ファイル・タイマー</h4>
+      <div class="shortcut-item"><span>動画ファイルを開く</span><span class="shortcut-key">O</span></div>
+      <div class="shortcut-item"><span>タイマー開始/停止</span><span class="shortcut-key">T</span></div>
+      <div class="shortcut-item"><span>タイマーリセット</span><span class="shortcut-key">Y</span></div>
+      <div class="shortcut-item"><span>手動保存</span><span class="shortcut-key">Ctrl+S</span></div>
+    </div>
+    <p style="text-align: center; margin-top: 16px; color: var(--text-secondary); font-size: 12px;">
+      ※ 入力フィールドにフォーカス中は無効
+    </p>
+    <button class="btn-secondary" style="width: 100%; margin-top: 8px;" onclick="document.getElementById('shortcutModal').classList.remove('show')">閉じる</button>
   </div>
 </div>
 
@@ -438,6 +955,9 @@ fileInput.onchange = function(e) {
   var filename = files[0].name;
   currentVideoId = filename.replace(/\.[^.]+$/, "");
   document.getElementById("editVideoId").value = currentVideoId;
+
+  // フォーカスを外してSpaceキーですぐ再生できるようにする
+  fileInput.blur();
 };
 
 // ===== 時間フォーマット =====
@@ -529,39 +1049,122 @@ document.getElementById("seekFwdFrame").onclick = function() { seekBy(0.1); };
 document.getElementById("seekFwd1").onclick = function() { seekBy(1); };
 document.getElementById("seekFwd10").onclick = function() { seekBy(10); };
 
-// ===== 音量コントロール =====
+// ===== 音量コントロール（ブースト対応） =====
 var volumeBar = document.getElementById("volumeBar");
 var volumeDisplay = document.getElementById("volumeDisplay");
 var muteBtn = document.getElementById("muteBtn");
+var boostIndicator = document.getElementById("boostIndicator");
+
+// Web Audio API for volume boost
+var audioContext = null;
+var gainNode = null;
+var audioSource = null;
+var currentVolume = 100; // 0-300%
+
+function initAudioBoost() {
+  if (audioContext) return; // Already initialized
+
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    gainNode = audioContext.createGain();
+    audioSource = audioContext.createMediaElementSource(v);
+    audioSource.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    applyVolume(currentVolume);
+  } catch (err) {
+    console.error("Web Audio API初期化失敗:", err);
+  }
+}
+
+function applyVolume(percent) {
+  currentVolume = percent;
+
+  if (percent <= 100) {
+    // 通常範囲: videoのvolumeで制御
+    v.volume = percent / 100;
+    if (gainNode) gainNode.gain.value = 1;
+    boostIndicator.style.display = "none";
+  } else {
+    // ブースト範囲: videoは100%、gainNodeで増幅
+    v.volume = 1;
+    if (gainNode) {
+      gainNode.gain.value = percent / 100;
+    }
+    boostIndicator.style.display = "inline";
+  }
+}
 
 function updateVolumeDisplay() {
-  var vol = Math.round(v.volume * 100);
-  volumeBar.value = vol;
-  volumeDisplay.textContent = vol + "%";
-  if (v.muted || v.volume === 0) {
+  volumeBar.value = currentVolume;
+  volumeDisplay.textContent = currentVolume + "%";
+
+  if (v.muted || currentVolume === 0) {
     muteBtn.textContent = "🔇 ミュート";
+    boostIndicator.style.display = "none";
+  } else if (currentVolume > 100) {
+    muteBtn.textContent = "🔊 音あり";
+    boostIndicator.style.display = "inline";
   } else {
     muteBtn.textContent = "🔊 音あり";
+    boostIndicator.style.display = "none";
   }
 }
 
 volumeBar.oninput = function() {
-  v.volume = volumeBar.value / 100;
+  var vol = parseInt(volumeBar.value);
   v.muted = false;
+
+  // 初回操作時にAudioContextを初期化（ユーザー操作が必要なため）
+  if (!audioContext && vol > 100) {
+    initAudioBoost();
+  }
+
+  applyVolume(vol);
   updateVolumeDisplay();
 };
 
 muteBtn.onclick = function() {
   if (v.muted) {
     v.muted = false;
-    if (v.volume === 0) v.volume = 0.5;
+    if (currentVolume === 0) {
+      currentVolume = 100;
+      applyVolume(100);
+    }
   } else {
     v.muted = true;
   }
   updateVolumeDisplay();
 };
 
-// 初期状態でミュートなので音量0で表示
+// 音量調整関数（ショートカット用）
+function adjustVolume(delta) {
+  var newVolume = currentVolume + delta;
+  // 0〜300%の範囲に制限
+  newVolume = Math.max(0, Math.min(300, newVolume));
+
+  v.muted = false;
+
+  // 100%超えの場合はAudioContextを初期化
+  if (!audioContext && newVolume > 100) {
+    initAudioBoost();
+  }
+
+  applyVolume(newVolume);
+  updateVolumeDisplay();
+}
+
+// 動画読み込み時にAudioContextを準備
+v.addEventListener("loadeddata", function() {
+  if (currentVolume > 100 && !audioContext) {
+    // ブーストが設定されていたら初期化
+    initAudioBoost();
+  }
+  applyVolume(currentVolume);
+  updateVolumeDisplay();
+});
+
+// 初期状態で100%音量
+currentVolume = 100;
 updateVolumeDisplay();
 
 // ===== 再生・停止・早送り・巻き戻し =====
@@ -796,6 +1399,20 @@ document.getElementById("downloadCsvBtn").onclick = function() {
   showStatus("CSVをダウンロードしました", "success");
 };
 
+// ===== バックアップから復元 =====
+document.getElementById("restoreFromBackupBtn").onclick = function() {
+  var backup = getBackupFromLocalStorage();
+  if (!backup || !backup.annotations || backup.annotations.length === 0) {
+    showStatus("復元できるバックアップがありません", "error");
+    return;
+  }
+
+  var timestamp = localStorage.getItem(BACKUP_TIMESTAMP_KEY) || "不明";
+  if (confirm("バックアップから復元しますか？\n\n保存日時: " + timestamp + "\nデータ数: " + backup.annotations.length + "件\n\n現在のデータは上書きされます。")) {
+    restoreFromBackup();
+  }
+};
+
 // ===== File System Access API: ローカルCSVを開く =====
 document.getElementById("openLocalCsvBtn").onclick = async function() {
   if (!window.showOpenFilePicker) {
@@ -817,7 +1434,12 @@ document.getElementById("openLocalCsvBtn").onclick = async function() {
     parseCsv(csv);
 
     document.getElementById("saveCsvBtn").disabled = false;
-    showStatus("ローカルCSV読み込み完了 (" + annotations.length + "件) - 上書き保存が有効になりました", "success");
+    showStatus("ローカルCSV読み込み完了 (" + annotations.length + "件)", "success");
+
+    // 自動保存ステータスを表示
+    var autoSaveStatus = document.getElementById("autoSaveStatus");
+    autoSaveStatus.innerHTML = "🔄 <strong>自動保存ON</strong>: 変更は自動的にCSVファイルに保存されます";
+    autoSaveStatus.classList.add("active");
   } catch (err) {
     if (err.name !== "AbortError") {
       showStatus("ファイルを開けませんでした: " + err.message, "error");
@@ -827,9 +1449,14 @@ document.getElementById("openLocalCsvBtn").onclick = async function() {
 
 // ===== File System Access API: 上書き保存 =====
 document.getElementById("saveCsvBtn").onclick = async function() {
+  await saveToCsv(true);
+};
+
+// ===== CSV保存関数（手動・自動共通） =====
+async function saveToCsv(showMessage) {
   if (!csvFileHandle) {
-    showStatus("先にローカルCSVを開いてください", "error");
-    return;
+    if (showMessage) showStatus("先にローカルCSVを開いてください", "error");
+    return false;
   }
 
   try {
@@ -844,9 +1471,246 @@ document.getElementById("saveCsvBtn").onclick = async function() {
     await writable.write(csv);
     await writable.close();
 
-    showStatus("上書き保存しました", "success");
+    if (showMessage) {
+      showStatus("上書き保存しました", "success");
+    } else {
+      showAutoSaveIndicator();
+    }
+    return true;
   } catch (err) {
-    showStatus("保存に失敗しました: " + err.message, "error");
+    showStatus("自動保存に失敗: " + err.message, "error");
+    return false;
+  }
+}
+
+// ===== 自動保存インジケーター =====
+function showAutoSaveIndicator() {
+  var indicator = document.getElementById("autoSaveIndicator");
+  if (indicator) {
+    indicator.textContent = "✓ 自動保存完了";
+    indicator.classList.add("show");
+    setTimeout(function() {
+      indicator.classList.remove("show");
+    }, 2000);
+  }
+}
+
+// ===== localStorageバックアップ =====
+var BACKUP_KEY = "annotationBackup";
+var BACKUP_TIMESTAMP_KEY = "annotationBackupTime";
+var hasUnsavedChanges = false;
+
+function saveToLocalStorage() {
+  try {
+    var backupData = {
+      annotations: annotations,
+      videoId: currentVideoId,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(BACKUP_KEY, JSON.stringify(backupData));
+    localStorage.setItem(BACKUP_TIMESTAMP_KEY, new Date().toLocaleString("ja-JP"));
+    return true;
+  } catch (err) {
+    console.error("localStorageバックアップ失敗:", err);
+    return false;
+  }
+}
+
+function getBackupFromLocalStorage() {
+  try {
+    var data = localStorage.getItem(BACKUP_KEY);
+    if (data) {
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error("バックアップ読み込み失敗:", err);
+  }
+  return null;
+}
+
+function clearBackup() {
+  localStorage.removeItem(BACKUP_KEY);
+  localStorage.removeItem(BACKUP_TIMESTAMP_KEY);
+}
+
+function restoreFromBackup() {
+  var backup = getBackupFromLocalStorage();
+  if (backup && backup.annotations) {
+    annotations = backup.annotations;
+    if (backup.videoId) {
+      currentVideoId = backup.videoId;
+      document.getElementById("editVideoId").value = currentVideoId;
+    }
+    renderTable();
+    showStatus("バックアップから復元しました (" + annotations.length + "件)", "success");
+    hasUnsavedChanges = true;
+    updateBackupStatus();
+    return true;
+  }
+  return false;
+}
+
+function updateBackupStatus() {
+  var backupStatus = document.getElementById("backupStatus");
+  var timestamp = localStorage.getItem(BACKUP_TIMESTAMP_KEY);
+  if (backupStatus && timestamp) {
+    backupStatus.textContent = "最終バックアップ: " + timestamp;
+    backupStatus.style.display = "block";
+  }
+}
+
+// ===== 自動保存を実行 =====
+function autoSave() {
+  // localStorageに常にバックアップ
+  saveToLocalStorage();
+  updateBackupStatus();
+
+  // CSVファイルが開かれていれば、ファイルにも保存
+  if (csvFileHandle) {
+    saveToCsv(false);
+    hasUnsavedChanges = false;
+  } else {
+    hasUnsavedChanges = true;
+  }
+}
+
+// ===== ページ離脱警告 =====
+window.addEventListener("beforeunload", function(e) {
+  // CSVファイルが開かれていない場合のみ警告
+  if (hasUnsavedChanges && annotations.length > 0) {
+    e.preventDefault();
+    e.returnValue = "未保存の変更があります。ページを離れますか？";
+    return e.returnValue;
+  }
+});
+
+// ===== 作業タイマー =====
+var timerState = {
+  running: false,
+  startTime: 0,
+  elapsedTime: 0,
+  annotationCount: 0,
+  intervalId: null
+};
+
+function formatTimerTime(ms) {
+  var totalSeconds = Math.floor(ms / 1000);
+  var hours = Math.floor(totalSeconds / 3600);
+  var minutes = Math.floor((totalSeconds % 3600) / 60);
+  var seconds = totalSeconds % 60;
+  return String(hours).padStart(2, '0') + ':' +
+         String(minutes).padStart(2, '0') + ':' +
+         String(seconds).padStart(2, '0');
+}
+
+function formatTimerShort(ms) {
+  var totalSeconds = Math.floor(ms / 1000);
+  var minutes = Math.floor(totalSeconds / 60);
+  var seconds = totalSeconds % 60;
+  if (minutes >= 60) {
+    var hours = Math.floor(minutes / 60);
+    minutes = minutes % 60;
+    return hours + ':' + String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+  }
+  return String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+}
+
+function updateTimerDisplay() {
+  var currentElapsed = timerState.elapsedTime;
+  if (timerState.running) {
+    currentElapsed += Date.now() - timerState.startTime;
+  }
+
+  // メイン表示
+  document.getElementById('timerDisplay').textContent = formatTimerTime(currentElapsed);
+
+  // 経過時間（短縮形）
+  document.getElementById('timerTotalTime').textContent = formatTimerShort(currentElapsed);
+
+  // 追加数
+  document.getElementById('timerCount').textContent = timerState.annotationCount;
+
+  // 件/時（1時間あたりの件数）
+  if (currentElapsed > 0 && timerState.annotationCount > 0) {
+    var hoursElapsed = currentElapsed / (1000 * 60 * 60);
+    var rate = timerState.annotationCount / hoursElapsed;
+    document.getElementById('timerRate').textContent = rate.toFixed(1);
+  } else {
+    document.getElementById('timerRate').textContent = '-';
+  }
+
+  // 平均時間
+  if (timerState.annotationCount > 0) {
+    var avgMs = currentElapsed / timerState.annotationCount;
+    document.getElementById('timerAvg').textContent = formatTimerShort(avgMs);
+    document.getElementById('timerAvgPanel').style.display = 'block';
+  } else {
+    document.getElementById('timerAvgPanel').style.display = 'none';
+  }
+}
+
+function startTimer() {
+  if (timerState.running) return;
+
+  timerState.running = true;
+  timerState.startTime = Date.now();
+
+  document.getElementById('timerPanel').classList.add('running');
+  document.getElementById('timerDisplay').classList.add('running');
+  document.getElementById('timerStartBtn').disabled = true;
+  document.getElementById('timerStartBtn').textContent = '▶ 計測中...';
+  document.getElementById('timerStopBtn').disabled = false;
+
+  timerState.intervalId = setInterval(updateTimerDisplay, 1000);
+  updateTimerDisplay();
+}
+
+function stopTimer() {
+  if (!timerState.running) return;
+
+  timerState.elapsedTime += Date.now() - timerState.startTime;
+  timerState.running = false;
+
+  document.getElementById('timerPanel').classList.remove('running');
+  document.getElementById('timerDisplay').classList.remove('running');
+  document.getElementById('timerStartBtn').disabled = false;
+  document.getElementById('timerStartBtn').textContent = '▶ 再開';
+  document.getElementById('timerStopBtn').disabled = true;
+
+  if (timerState.intervalId) {
+    clearInterval(timerState.intervalId);
+    timerState.intervalId = null;
+  }
+  updateTimerDisplay();
+}
+
+function resetTimer() {
+  stopTimer();
+  timerState.elapsedTime = 0;
+  timerState.annotationCount = 0;
+  timerState.startTime = 0;
+
+  document.getElementById('timerStartBtn').textContent = '▶ 開始';
+  updateTimerDisplay();
+}
+
+function incrementTimerCount() {
+  if (timerState.running) {
+    timerState.annotationCount++;
+    updateTimerDisplay();
+  }
+}
+
+// タイマーボタンのイベント
+document.getElementById('timerStartBtn').onclick = startTimer;
+document.getElementById('timerStopBtn').onclick = stopTimer;
+document.getElementById('timerResetBtn').onclick = function() {
+  if (timerState.annotationCount > 0 || timerState.elapsedTime > 0) {
+    if (confirm('タイマーをリセットしますか？\n記録がクリアされます。')) {
+      resetTimer();
+    }
+  } else {
+    resetTimer();
   }
 };
 
@@ -934,6 +1798,7 @@ function deleteAnnotation(id) {
 
   renderTable();
   showStatus("ID " + id + " を削除しました", "success");
+  autoSave(); // 自動保存
 }
 
 // ===== フォームクリア =====
@@ -990,9 +1855,11 @@ document.getElementById("saveBtn").onclick = function() {
       query: query
     });
     showStatus("ID " + (maxId + 1) + " を追加しました", "success");
+    incrementTimerCount(); // タイマーカウント増加
   }
 
   clearForm();
+  autoSave(); // 自動保存
 };
 
 // ===== 現在時刻セット =====
@@ -1119,6 +1986,37 @@ function showStatus(msg, type) {
 
 // ===== 初期化: CSV自動読み込み =====
 window.onload = function() {
+  // バックアップの確認
+  var backup = getBackupFromLocalStorage();
+  var backupTimestamp = localStorage.getItem(BACKUP_TIMESTAMP_KEY);
+
+  if (backup && backup.annotations && backup.annotations.length > 0) {
+    // バックアップがある場合、モーダルを表示
+    var backupInfo = document.getElementById("backupInfo");
+    backupInfo.innerHTML = "<strong>" + backup.annotations.length + "件</strong>のアノテーション<br>保存日時: " + backupTimestamp;
+
+    document.getElementById("backupModal").classList.add("show");
+
+    document.getElementById("restoreBackupBtn").onclick = function() {
+      restoreFromBackup();
+      document.getElementById("backupModal").classList.remove("show");
+    };
+
+    document.getElementById("ignoreBackupBtn").onclick = function() {
+      document.getElementById("backupModal").classList.remove("show");
+      clearBackup();
+      // CSVを読み込む
+      loadCsvFromServer();
+    };
+  } else {
+    // バックアップがない場合、通常通りCSVを読み込む
+    loadCsvFromServer();
+  }
+
+  updateBackupStatus();
+};
+
+function loadCsvFromServer() {
   fetch("jichi2507_rule.csv?t=" + Date.now())
     .then(function(res) {
       if (!res.ok) throw new Error("CSV not found");
@@ -1131,7 +2029,368 @@ window.onload = function() {
     .catch(function(err) {
       showStatus("CSVファイルが見つかりません。手動で読み込んでください。", "error");
     });
+}
+
+// ===== キーボードショートカット =====
+document.getElementById("shortcutHelpBtn").onclick = function() {
+  document.getElementById("shortcutModal").classList.add("show");
 };
+
+document.getElementById("shortcutModal").onclick = function(e) {
+  if (e.target === this) {
+    this.classList.remove("show");
+  }
+};
+
+// 入力フィールドにフォーカスがあるかチェック
+// インサートモード（クエリ入力モード）
+var insertMode = false;
+
+function isInputFocused() {
+  var el = document.activeElement;
+  if (!el) return false;
+  // クエリテキストエリアのみ許可
+  return el.id === "editQuery";
+}
+
+function enterInsertMode() {
+  insertMode = true;
+  var queryInput = document.getElementById("editQuery");
+  queryInput.focus();
+  updateInsertModeIndicator();
+}
+
+function exitInsertMode() {
+  insertMode = false;
+  document.getElementById("editQuery").blur();
+  document.activeElement.blur();
+  updateInsertModeIndicator();
+}
+
+function updateInsertModeIndicator() {
+  var indicator = document.getElementById("insertModeIndicator");
+  if (insertMode) {
+    indicator.classList.add("active");
+    indicator.textContent = "📝 INSERT MODE (Escで終了)";
+  } else {
+    indicator.classList.remove("active");
+    indicator.textContent = "[I] で入力モード";
+  }
+}
+
+// クリップボードからペースト
+async function pasteToQuery() {
+  try {
+    var text = await navigator.clipboard.readText();
+    var queryInput = document.getElementById("editQuery");
+
+    // 現在のカーソル位置に挿入、またはフォーカスしていなければ末尾に追加
+    if (document.activeElement === queryInput) {
+      var start = queryInput.selectionStart;
+      var end = queryInput.selectionEnd;
+      var current = queryInput.value;
+      queryInput.value = current.substring(0, start) + text + current.substring(end);
+      queryInput.selectionStart = queryInput.selectionEnd = start + text.length;
+    } else {
+      queryInput.value += text;
+    }
+
+    showStatus("クリップボードからペーストしました", "success");
+  } catch (err) {
+    showStatus("ペースト失敗: クリップボードへのアクセスが拒否されました", "error");
+  }
+}
+
+// 全てのボタンクリック後にフォーカスを外す
+document.addEventListener("click", function(e) {
+  var target = e.target;
+  if (target.tagName === "BUTTON" || target.tagName === "INPUT" && target.type !== "text" && target.type !== "number" && target.id !== "editQuery") {
+    // クエリ以外の入力要素やボタンはクリック後にフォーカスを外す
+    setTimeout(function() {
+      if (document.activeElement && document.activeElement.id !== "editQuery") {
+        document.activeElement.blur();
+      }
+    }, 10);
+  }
+});
+
+// クエリテキストエリアのフォーカス/ブラーでインサートモード切り替え
+document.getElementById("editQuery").addEventListener("focus", function() {
+  insertMode = true;
+  updateInsertModeIndicator();
+});
+
+document.getElementById("editQuery").addEventListener("blur", function() {
+  insertMode = false;
+  updateInsertModeIndicator();
+});
+
+// Escapeでインサートモード終了
+document.getElementById("editQuery").addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    e.preventDefault();
+    exitInsertMode();
+  }
+});
+
+// ペーストボタン
+document.getElementById("pasteBtn").onclick = function() {
+  pasteToQuery();
+  this.blur();
+};
+
+document.addEventListener("keydown", function(e) {
+  // モーダルが開いている場合はEscで閉じる
+  var modal = document.getElementById("shortcutModal");
+  if (modal.classList.contains("show")) {
+    if (e.key === "Escape") {
+      modal.classList.remove("show");
+    }
+    return;
+  }
+
+  // Ctrl+S: 手動保存
+  if (e.ctrlKey && e.key === "s") {
+    e.preventDefault();
+    saveToCsv(true);
+    return;
+  }
+
+  // 入力フィールドにフォーカスがある場合はショートカット無効
+  if (isInputFocused()) return;
+
+  var key = e.key.toLowerCase();
+
+  switch (key) {
+    // 再生コントロール
+    case " ": // Space: 再生/一時停止
+      e.preventDefault();
+      document.getElementById("btnPlayPause").click();
+      break;
+    case "r": // R: 巻き戻し
+      e.preventDefault();
+      document.getElementById("btnRewind").click();
+      break;
+    case "f": // F: 早送り
+      e.preventDefault();
+      document.getElementById("btnFastFwd").click();
+      break;
+    case "m": // M: ミュート
+      e.preventDefault();
+      document.getElementById("muteBtn").click();
+      break;
+    case "arrowup": // ↑: 音量+10%
+      e.preventDefault();
+      adjustVolume(10);
+      break;
+    case "arrowdown": // ↓: 音量-10%
+      e.preventDefault();
+      adjustVolume(-10);
+      break;
+    case "[": // [: 音量-10%
+      e.preventDefault();
+      adjustVolume(-10);
+      break;
+    case "]": // ]: 音量+10%
+      e.preventDefault();
+      adjustVolume(10);
+      break;
+
+    // シーク
+    case "j": // J: -10秒
+      e.preventDefault();
+      seekBy(-10);
+      break;
+    case "l": // L: +10秒
+      e.preventDefault();
+      seekBy(10);
+      break;
+    case "arrowleft": // ←: -1秒
+      e.preventDefault();
+      seekBy(-1);
+      break;
+    case "arrowright": // →: +1秒
+      e.preventDefault();
+      seekBy(1);
+      break;
+    case ",": // ,: -0.1秒
+      e.preventDefault();
+      seekBy(-0.1);
+      break;
+    case ".": // .: +0.1秒
+      e.preventDefault();
+      seekBy(0.1);
+      break;
+
+    // アノテーション
+    case "s": // S: Start時刻セット
+      e.preventDefault();
+      document.getElementById("setStartBtn").click();
+      break;
+    case "e": // E: End時刻セット
+      e.preventDefault();
+      document.getElementById("setEndBtn").click();
+      break;
+    case "c": // C: タイムスタンプコピー
+      e.preventDefault();
+      document.getElementById("timestampBtn").click();
+      break;
+    case "p": // P: 精密モード
+      e.preventDefault();
+      document.getElementById("fineModeBtn").click();
+      break;
+
+    // ファイル・フォーム操作
+    case "o": // O: ファイルを開く
+      e.preventDefault();
+      document.getElementById("file").click();
+      break;
+    case "enter": // Enter: アノテーション追加/更新
+      e.preventDefault();
+      document.getElementById("saveBtn").click();
+      break;
+    case "i": // I: インサートモード（クエリ入力）
+      e.preventDefault();
+      enterInsertMode();
+      break;
+    case "v": // V: クリップボードからペースト
+      e.preventDefault();
+      pasteToQuery();
+      break;
+
+    // タイマー操作
+    case "t": // T: タイマー開始/停止トグル
+      e.preventDefault();
+      if (timerState.running) {
+        stopTimer();
+      } else {
+        startTimer();
+      }
+      break;
+    case "y": // Y: タイマーリセット
+      e.preventDefault();
+      if (timerState.annotationCount > 0 || timerState.elapsedTime > 0) {
+        if (confirm('タイマーをリセットしますか？')) {
+          resetTimer();
+        }
+      }
+      break;
+
+    // ヘルプ
+    case "?": // ?: ショートカットヘルプ
+      e.preventDefault();
+      document.getElementById("shortcutModal").classList.add("show");
+      break;
+  }
+});
+
+// ===== リサイズ機能 =====
+(function() {
+  var resizeHandle = document.getElementById("resizeHandle");
+  var leftColumn = document.getElementById("leftColumn");
+  var rightColumn = document.getElementById("rightColumn");
+  var mainGrid = document.getElementById("mainGrid");
+
+  if (!resizeHandle || !leftColumn || !rightColumn || !mainGrid) return;
+
+  var isDragging = false;
+  var startX = 0;
+  var startLeftWidth = 0;
+
+  // 保存された幅を復元
+  var savedLeftWidth = localStorage.getItem("columnLeftWidth");
+  if (savedLeftWidth && window.innerWidth >= 1024) {
+    var percent = parseFloat(savedLeftWidth);
+    if (percent >= 20 && percent <= 80) {
+      leftColumn.style.flex = "0 0 " + percent + "%";
+      rightColumn.style.flex = "0 0 " + (100 - percent - 2) + "%";
+    }
+  }
+
+  function onMouseDown(e) {
+    if (window.innerWidth < 1024) return;
+
+    isDragging = true;
+    startX = e.clientX || e.touches[0].clientX;
+    startLeftWidth = leftColumn.offsetWidth;
+
+    resizeHandle.classList.add("dragging");
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+
+    e.preventDefault();
+  }
+
+  function onMouseMove(e) {
+    if (!isDragging) return;
+
+    var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    if (!clientX) return;
+
+    var delta = clientX - startX;
+    var containerWidth = mainGrid.offsetWidth;
+    var newLeftWidth = startLeftWidth + delta;
+
+    // 最小・最大幅の制限（20%〜80%）
+    var minWidth = containerWidth * 0.2;
+    var maxWidth = containerWidth * 0.8;
+
+    if (newLeftWidth < minWidth) newLeftWidth = minWidth;
+    if (newLeftWidth > maxWidth) newLeftWidth = maxWidth;
+
+    var leftPercent = (newLeftWidth / containerWidth) * 100;
+    var rightPercent = 100 - leftPercent - 2; // 2% for handle and gaps
+
+    leftColumn.style.flex = "0 0 " + leftPercent + "%";
+    rightColumn.style.flex = "0 0 " + rightPercent + "%";
+  }
+
+  function onMouseUp() {
+    if (!isDragging) return;
+
+    isDragging = false;
+    resizeHandle.classList.remove("dragging");
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+
+    // 幅を保存
+    var containerWidth = mainGrid.offsetWidth;
+    var leftPercent = (leftColumn.offsetWidth / containerWidth) * 100;
+    localStorage.setItem("columnLeftWidth", leftPercent.toFixed(1));
+  }
+
+  // マウスイベント
+  resizeHandle.addEventListener("mousedown", onMouseDown);
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
+
+  // タッチイベント
+  resizeHandle.addEventListener("touchstart", onMouseDown, { passive: false });
+  document.addEventListener("touchmove", onMouseMove, { passive: false });
+  document.addEventListener("touchend", onMouseUp);
+
+  // ウィンドウリサイズ時にリセット
+  var resizeTimeout;
+  window.addEventListener("resize", function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+      if (window.innerWidth < 1024) {
+        leftColumn.style.flex = "";
+        rightColumn.style.flex = "";
+      } else {
+        // 保存された幅を再適用
+        var saved = localStorage.getItem("columnLeftWidth");
+        if (saved) {
+          var percent = parseFloat(saved);
+          if (percent >= 20 && percent <= 80) {
+            leftColumn.style.flex = "0 0 " + percent + "%";
+            rightColumn.style.flex = "0 0 " + (100 - percent - 2) + "%";
+          }
+        }
+      }
+    }, 100);
+  });
+})();
 </script>
 
 </div>
